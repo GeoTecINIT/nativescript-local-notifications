@@ -2,6 +2,7 @@ package com.telerik.localnotifications;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -105,10 +106,18 @@ public class NotificationActionReceiver extends IntentService {
   }
 
   private void forceMainActivityReload() {
-    PackageManager pm = getPackageManager();
+    ComponentName mainActivityRef = new ComponentName(
+            getApplicationContext(),
+            "com.tns.NativeScriptActivity"
+    );
+    Intent launchIntent = new Intent()
+            .setComponent(mainActivityRef)
+            .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    /*PackageManager pm = getPackageManager();
     Intent launchIntent = pm.getLaunchIntentForPackage(getApplicationContext().getPackageName());
     Log.d(TAG, "starting activity for package: " + getApplicationContext().getPackageName());
     launchIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);*/
     startActivity(launchIntent);
   }
 }
